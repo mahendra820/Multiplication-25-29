@@ -1,7 +1,19 @@
-const factors1 = [2, 3, 4, 5];
+const factors1 = [2, 3, 4, 5, 6, 7, 8, 9];
 const factors2 = [2, 3, 4, 5, 6, 7, 8, 9,];
 let factor1, factor2, answer;
 let feedbackMessages = [];
+
+// Update factors1 based on user selections
+function updateFactors1() {
+    const selectedFactors = Array.from(document.querySelectorAll("#factor2Select input:checked")).map(input => parseInt(input.value));
+    factors1.length = 0; // Clear factors1 array
+    factors1.push(...selectedFactors); // Add selected factors to factors1
+}
+
+// Call updateFactors1 whenever selection changes
+document.querySelectorAll("#factor2Select input").forEach(input => {
+    input.addEventListener("change", updateFactors1);
+});
 
 function generateQuestion() {
     factor1 = factors1[Math.floor(Math.random() * factors1.length)];
@@ -25,15 +37,15 @@ function checkAnswer() {
         feedbackMessages.push("Correct!");
         showFeedback("Correct!", "correct");
     } else {
-        feedbackMessages.push(`Wrong. ${factor1} x ${factor2} = ${answer}`);
-        showFeedback(`Wrong. ${factor1} x ${factor2} = ${answer}`, "wrong");
+        feedbackMessages.push(`Incorrect. ${factor1} x ${factor2} = ${answer}`);
+        showFeedback(`Incorrect. ${factor1} x ${factor2} = ${answer}`, "Incorrect");
     }
 }
 
 function showFeedback(message, className) {
     const feedbackElement = document.getElementById("feedback");
     feedbackElement.textContent = message;
-    feedbackElement.classList.remove("correct", "wrong");
+    feedbackElement.classList.remove("correct", "Incorrect");
     feedbackElement.classList.add(className);
 }
 
@@ -51,7 +63,7 @@ submitButton.addEventListener("click", () => {
     loadNextProblem(); // Load another problem when submit button is clicked
 });
 
-userAnswerInput.addEventListener("keypress", function(event) {
+userAnswerInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         event.preventDefault(); // Prevent default form submission behavior
         checkAnswer();
